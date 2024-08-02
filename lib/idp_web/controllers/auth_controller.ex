@@ -10,6 +10,16 @@ defmodule IdpWeb.AuthController do
     #   - scope: OpenID Connect requests MUST contain the "openid" scope value
     #   - redirect_uri: This URI MUST exactly match one of the Redirection URI values for the Client pre-registered at the OpenID Provider
     #   - state: RECOMMENDED. Opaque value used to maintain state between the request and the callback
+    #
+    # Example:
+    #
+    # [base-url]/authorize?
+    #  response_type=code
+    #  &scope=openid
+    #  &client_id=123
+    #  &state=af0ifjsldkj
+    #  &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
+
     conn
     |> send_resp(200, "Authorize")
   end
