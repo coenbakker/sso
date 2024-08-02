@@ -1,5 +1,6 @@
-defmodule Idp.UsersTest do
+defmodule Idp.UserTest do
   use Idp.DataCase, async: true
+  import Idp.TestUtils
   alias Idp.Users.User
   alias Idp.Repo
 
@@ -71,15 +72,5 @@ defmodule Idp.UsersTest do
       refute changeset.valid?
       assert {:ok, {"has already been taken", _}} = get_error(changeset, :email)
     end
-  end
-
-  @spec get_error(Ecto.Changeset.t(), field :: atom()) :: {:ok, Ecto.Changeset.error()} | :error
-  defp get_error(changeset, field) do
-    Keyword.fetch(changeset.errors, field)
-  end
-
-  @spec has_error?(Ecto.Changeset.t(), field :: atom()) :: boolean()
-  defp has_error?(changeset, field) do
-    Keyword.has_key?(changeset.errors, field)
   end
 end
