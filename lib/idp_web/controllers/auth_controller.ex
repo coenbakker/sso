@@ -12,7 +12,8 @@ defmodule IdpWeb.AuthController do
     #   - client_id: OAuth 2.0 Client Identifier
     #   - scope: OpenID Connect requests MUST contain the "openid" scope value
     #   - redirect_uri: This URI MUST exactly match one of the Redirection URI values for the Client pre-registered at the OpenID Provider
-    #   - state: RECOMMENDED. Opaque value used to maintain state between the request and the callback
+    #
+    # SECURITY NOTE: Recommened to include state param as CSRF counter-measure.
     #
     # Example:
     #
@@ -47,8 +48,8 @@ defmodule IdpWeb.AuthController do
     #   - token_type: The value MUST be Bearer (case-insensitive)
     #   - id_token
     #
-    # Note: Also can return expires_in.
-    # 
+    # SECURITY NOTE: Also can return expires_in.
+    #
     # Example:
     #
     # HTTP/1.1 200 OK
