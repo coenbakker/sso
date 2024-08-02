@@ -8,8 +8,6 @@ defmodule Idp.UserTest do
   @invalid_emails ["user", "user@", "user@ ", "user @example.com"]
   @invalid_passwords ["Too_Short", "missing_uppercase", "MISSING_LOWERCASE", "MissingDigitOrPunctuation"]
 
-  %{"email" => "user1234", "password" => "too_short"}
-
   describe "user changeset" do
     test "with valid attributes" do
       changeset = User.changeset(%User{}, @valid_attrs)
