@@ -10,4 +10,10 @@ defmodule Idp.TestUtils do
   def get_error(changeset, field) do
     Keyword.fetch(changeset.errors, field)
   end
+
+  @spec exec_time(fun()) :: microseconds :: integer()
+  def exec_time(fun) do
+    {time, _} = :timer.tc(fun, :microsecond)
+    time
+  end
 end
