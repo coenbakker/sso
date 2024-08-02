@@ -11,7 +11,7 @@ defmodule Idp.Users.User do
 
   schema "users" do
     field :email, :string
-    field :password_hash, :string
+    field :password_hash, :string, redact: true
     field :password, :string, redact: true, virtual: true
 
     timestamps()
