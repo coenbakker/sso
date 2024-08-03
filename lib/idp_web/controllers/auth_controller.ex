@@ -1,8 +1,6 @@
 defmodule IdpWeb.AuthController do
   use IdpWeb, :controller
 
-  # OAuth 2.0 spec: https://www.rfc-editor.org/rfc/rfc6749.html
-
   def authorize(conn, _params) do
     # REQUEST
     # Spec: https://openid.net/specs/openid-connect-basic-1_0.html#AuthenticationRequest
