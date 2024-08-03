@@ -10,8 +10,13 @@ The Idb app can be used by a selection of other apps to authenticate a user and 
 OpenID Connect is an authentication flow on top of the OAuth 2.0 authorization flow.
 
 ### Relevant Elixir packages
+#### Client
   - **Oidcc**: OpenID Connect client library for Erlang (https://hexdocs.pm/oidcc/readme.html).
   - **Oidcc Plug**: Oidcc integration with Plug and Phoenix (https://hexdocs.pm/oidcc_plug/readme.html).
+  - **Assent**: Multi-provider authentication framework (https://github.com/pow-auth/assent).
+
+#### Server
+  - **Boruta**: Boruta is the core of an OAuth 2.0 and OpenID Connect provider implementing according business rules (https://hexdocs.pm/boruta/api-reference.html). This library also provides a generator to create phoenix controllers, views and templates to have a basic provider up and running. An example integration is available at https://github.com/patatoid/boruta_example.
   
 ### Specifications
   - **OAuth** 2.0: https://www.rfc-editor.org/rfc/rfc6749.html
@@ -58,6 +63,8 @@ This is an overview of our implementation of the OpenID Connect flow. The graph 
 |          |                              |          |
 +----------+                              +----------+  
 ```
+
+IMPORTANT TODO: Is the implicit flow a security hazard?
 
 ## Authorization server endpoints
 Being the authorization server, the Idb app requires the following endpoints.
