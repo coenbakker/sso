@@ -3,7 +3,7 @@ defmodule Idp.Repo.Migrations.CreateUsersTable do
 
   def change do
     execute "CREATE EXTENSION IF NOT EXISTS citext", ""
-    
+
     create table(:users) do
       add :email, :citext, null: false
       add :password_hash, :string, null: false

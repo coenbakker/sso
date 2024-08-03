@@ -44,13 +44,19 @@ defmodule Idp.Users.User do
     |> validate_length(:password, min: 10, max: 70)
     |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/,
+      message: "at least one digit or punctuation character"
+    )
   end
 
   @spec put_password_hash(Ecto.Changeset.t()) :: Ecto.Changeset.t()
   defp put_password_hash(changeset) do
     if changeset.valid? do
-      put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(get_change(changeset, :password)))
+      put_change(
+        changeset,
+        :password_hash,
+        Bcrypt.hash_pwd_salt(get_change(changeset, :password))
+      )
     else
       changeset
     end

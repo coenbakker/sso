@@ -6,7 +6,12 @@ defmodule Idp.UserTest do
 
   @valid_attrs %{"email" => "user1234@example.com", "password" => "Secret_Password_1234"}
   @invalid_emails ["user", "user@", "user@ ", "user @example.com"]
-  @invalid_passwords ["Too_Short", "missing_uppercase", "MISSING_LOWERCASE", "MissingDigitOrPunctuation"]
+  @invalid_passwords [
+    "Too_Short",
+    "missing_uppercase",
+    "MISSING_LOWERCASE",
+    "MissingDigitOrPunctuation"
+  ]
 
   describe "user changeset" do
     test "with valid attributes" do
