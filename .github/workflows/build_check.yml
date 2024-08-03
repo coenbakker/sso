@@ -1,5 +1,5 @@
 name: Build Check
-run-name: ${{ github.event_name }} by @${{ github.actor }} to ${{ github.ref }} branch
+run-name: ${{ github.event_name }} by @${{ github.actor }} to main branch
 
 on:
   push:
