@@ -4,22 +4,22 @@ defmodule IdpWeb.AuthTest do
   alias Idp.Users.User
   alias IdpWeb.Auth
 
-  @valid_password "Secret_Password_1234"
-  @invalid_password "Too_Short"
+  @correct_password "Secret_Password_1234"
+  @wrong_password "Wrong_Password_1234"
 
   describe "valid_password?/2" do
     test "returns true for a valid password" do
-      user = %User{password_hash: Bcrypt.hash_pwd_salt(@valid_password)}
-      assert Auth.valid_password?(user, @valid_password)
+      user = %User{password_hash: Bcrypt.hash_pwd_salt(@correct_password)}
+      assert Auth.valid_password?(user, @correct_password)
     end
 
     test "returns false for an invalid password" do
-      user = %User{password_hash: Bcrypt.hash_pwd_salt(@valid_password)}
-      refute Auth.valid_password?(user, @invalid_password)
+      user = %User{password_hash: Bcrypt.hash_pwd_salt(@correct_password)}
+      refute Auth.valid_password?(user, @wrong_password)
     end
 
     test "returns false for a missing user" do
-      refute Auth.valid_password?(nil, @valid_password)
+      refute Auth.valid_password?(nil, @correct_password)
     end
 
     # IMPORTANT! This test alone is not sufficient to test for timing attack
@@ -28,25 +28,20 @@ defmodule IdpWeb.AuthTest do
     # this test fails it is likely that no counter measure was taken at all,
     # indicating a severe vulnerability.
     test "executing time when user is missing is not much smaller than other cases" do
-      Task.async_stream(
-        1..10,
-        fn _ ->
-          margin = 0.3
+      margin = 0.3
 
-          valid_time =
-            exec_time(fn -> %User{password_hash: Bcrypt.hash_pwd_salt(@valid_password)} end)
+      user = %User{password_hash: Bcrypt.hash_pwd_salt(@correct_password)}
 
-          invalid_time =
-            exec_time(fn -> %User{password_hash: Bcrypt.hash_pwd_salt(@valid_password)} end)
+      check_correct_pw = fn -> Auth.valid_password?(user, @correct_password) end
+      check_wrong_pw = fn -> Auth.valid_password?(user, @wrong_password) end
+      check_missing_pw = fn -> Auth.valid_password?(nil, @correct_password) end
 
-          missing_time = exec_time(fn -> Auth.valid_password?(nil, @valid_password) end)
+      corret_pw_time = exec_time(check_correct_pw)
+      wrong_pw_time = exec_time(check_wrong_pw)
+      missing_pw_time = exec_time(check_missing_pw)
 
-          assert missing_time > valid_time * margin
-          assert missing_time > invalid_time * margin
-        end,
-        max_concurrency: 8
-      )
-      |> Stream.run()
+      assert missing_pw_time > corret_pw_time * margin
+      assert missing_pw_time > wrong_pw_time * margin
     end
   end
 end
