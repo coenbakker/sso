@@ -16,7 +16,8 @@ OpenID Connect is an authentication flow on top of the OAuth 2.0 authorization f
   - **Assent**: Multi-provider authentication framework (https://github.com/pow-auth/assent).
 
 #### Server
-  - **Boruta**: Boruta is the core of an OAuth 2.0 and OpenID Connect provider implementing according business rules (https://hexdocs.pm/boruta/api-reference.html). This library also provides a generator to create phoenix controllers, views and templates to have a basic provider up and running. An example integration is available at https://github.com/patatoid/boruta_example.
+  - **boruta_auth**: Boruta is the core of an OAuth 2.0 and OpenID Connect provider implementing according business rules (https://hexdocs.pm/boruta/api-reference.html). This library also provides a generator to create phoenix controllers, views and templates to have a basic provider up and running. An example integration is available at https://github.com/patatoid/boruta_example.
+  - **boruta-server**: OpenID certified lightweight Identity and Access Management server (https://github.com/malach-it/boruta-server).
   
 ### Specifications
   - **OAuth** 2.0: https://www.rfc-editor.org/rfc/rfc6749.html
