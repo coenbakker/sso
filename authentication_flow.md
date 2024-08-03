@@ -37,23 +37,26 @@ This is an overview of our implementation of the OpenID Connect flow. The graph 
 **Note**. In our case the OP is not only responsible for the authentication endpoint, but also the token and user info endpoints.
 
 ```
-+----------+                             +----------+  
-|          |                             |          |
-|          |---------------------------->|          |    (1) RP makes authentication request: `POST /authorize` or `GET /authorize`
-|          |                             |          |
-|          |                             |          |
-|          |                             |          |    (2) OP performs End-User authentication
-|          |                             |          |
-|    RP    |                             |    OP    |
-|          |<----------------------------|          |    (5) OP responds with ID Token and Access Token
-|          |                             |          |
-|          |                             |          |
-|          |---------------------------->|          |    (6) OPTIONAL: RP requests Claims: GET `user-info?`
-|          |                             |          |
-|          |                             |          |
-|          |<----------------------------|          |    (7) OPTIONAL: OP responds with Claims
-|          |                             |          |
-+----------+                             +----------+  
++----------+                              +----------+  
+|          |                              |          |
+|          |----------------------------->|          |    (1) RP makes authentication request: `POST /authorize` or `GET /authorize`
+|          |                              |          |
+|          |        +------------+        |          |
+|          |        |            |<-------|          |    (2) OP back end sends End-User to OP front end to fill out authentication form
+|          |        |     OP     |        |          |    
+|          |        | front end  |        |          |
+|          |        |            |------->|          |    (3) OP front end requests user login
+|          |        +------------+        |          |
+|    RP    |                              |    OP    |
+|          |<-----------------------------| back end |    (4) OP responds with ID Token and Access Token
+|          |                              |          |
+|          |                              |          |
+|          |----------------------------->|          |    (5) OPTIONAL: RP requests Claims: GET `user-info?`
+|          |                              |          |
+|          |                              |          |
+|          |<-----------------------------|          |    (6) OPTIONAL: OP responds with Claims
+|          |                              |          |
++----------+                              +----------+  
 ```
 
 ## Authorization server endpoints
