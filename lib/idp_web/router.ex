@@ -18,6 +18,7 @@ defmodule IdpWeb.Router do
     pipe_through :browser
 
     get "/authorize", AuthController, :authorize
+    post "/authorize", AuthController, :authorize
   end
 
   # Other scopes may use custom stacks.

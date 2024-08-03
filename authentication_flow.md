@@ -9,21 +9,25 @@ The Idb app can be used by a selection of other apps to authenticate a user and 
 ## OpenID Connect
 OpenID Connect is an authentication flow on top of the OAuth 2.0 authorization flow.
 
+### Relevant Elixir packages
+  - **Oidcc**: OpenID Connect client library for Erlang (https://hexdocs.pm/oidcc/readme.html).
+  - **Oidcc Plug**: Oidcc integration with Plug and Phoenix (https://hexdocs.pm/oidcc_plug/readme.html).
+  
 ### Specifications
-  - OAuth 2.0: https://www.rfc-editor.org/rfc/rfc6749.html
-  - OpenID Connect Core: https://openid.net/specs/openid-connect-core-1_0.html
+  - **OAuth** 2.0: https://www.rfc-editor.org/rfc/rfc6749.html
+  - **OpenID** Connect Core: https://openid.net/specs/openid-connect-core-1_0.html
 
 ## Definitions
 Definitions from the Oauth 2.0 and OpenID Connect specifications, adjusted to fit our purposes.
 
-  - End-user: The human participant.
-  - Claim: Piece of information asserted about an End-User.
-  - Relying Party (RP): An app that wants to authenticate an End-User and requires Claims.
-  - OpenID Provider (OP): App that can authenticate an End-User and provide Claims (i.e., the Idp app).
-  - Access Token: JWT that contains credentials used to access protected Claims. It represents specific scopes and durations of access that are issued, granted and enforced by the OP.
-  - ID Token: JWT that contains Claims.
-  - client_id: string that uniquely identifies a RP 
-  - client_secret: secret string that proves that the RP is authentic
+  - **End-User**: The human participant.
+  - **Claim**: Piece of information asserted about an End-User.
+  - **Relying Party (RP)**: An app that wants to authenticate an End-User and requires Claims.
+  - **OpenID Provider (OP)**: App that can authenticate an End-User and provide Claims (i.e., the Idp app).
+  - **Access Token**: JWT that contains credentials used to access protected Claims. It represents specific scopes and durations of access that are issued, granted and enforced by the OP.
+  - **ID** Token: JWT that contains Claims.
+  - **client_id**: string that uniquely identifies a RP 
+  - **client_secret**: secret string that proves that the RP is authentic
 
 
 ## Flow overview
