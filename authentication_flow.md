@@ -45,7 +45,7 @@ This is an overview of our implementation of the OpenID Connect flow. The graph 
 |          |        |            |<-------|          |    (2) OP back end sends End-User to OP front end to fill out authentication form
 |          |        |     OP     |        |          |    
 |          |        | front end  |        |          |
-|          |        |            |------->|          |    (3) OP front end requests user login
+|          |        |            |------->|          |    (3) OP front end requests user login: `POST /log-in`
 |          |        +------------+        |          |
 |    RP    |                              |    OP    |
 |          |<-----------------------------| back end |    (4) OP responds with ID Token and Access Token
@@ -106,3 +106,6 @@ HTTP/1.1 302 Found
 
 ### `GET /authorize`
 Same as `POST /authorize`. The OpenID Connect specification requires both to be available to RPs.
+
+### `POST /log-in`
+Endpoint for logging in user by email and password.
