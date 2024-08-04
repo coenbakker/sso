@@ -86,7 +86,7 @@ jobs:
       run: mix format --check-formatted
 
     - name: Run tests
-      run: mix test
+      run: mix test.all
 
     - name: Check migrations
       run: mix ecto.rollback — all
