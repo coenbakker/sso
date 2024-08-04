@@ -1,15 +1,16 @@
 defmodule ExampleClientWeb.Auth do
   import Plug.Conn
+  import Phoenix.Controller
   alias Assent.Config
   alias ExampleClientWeb.AuthStrategy
 
+  # TODO: Store these in a secure location
   @config [
     client_id: "REPLACE_WITH_CLIENT_ID",
     client_secret: "REPLACE_WITH_CLIENT_SECRET",
     redirect_uri: "http://localhost:4000/auth/callback"
   ]
 
-  # http://localhost:4000/auth/
   def request(conn) do
     @config
     |> AuthStrategy.authorize_url()
@@ -27,10 +28,10 @@ defmodule ExampleClientWeb.Auth do
       {:error, error} ->
         IO.inspect(error)
         # Something went wrong generating the request authorization url
+        conn
     end
   end
 
-  # http://localhost:4000/auth/callback
   def callback(conn) do
     # End-user will return to the callback URL with params attached to the
     # request. These must be passed on to the strategy. In this example we only
@@ -50,11 +51,25 @@ defmodule ExampleClientWeb.Auth do
       {:ok, %{user: user, token: token}} ->
         IO.inspect(user)
         IO.inspect(token)
-        # Authorization succesful
+        # Authorization successful
+        # TODO: Remember that user has been authorized and redirect user to the protected resource they were trying to access
+        conn
 
       {:error, error} ->
         IO.inspect(error)
         # Authorizaiton failed
+        # TODO: Handle error case
+        conn
+    end
+  end
+
+  def require_authenticated_user(conn, _opts) do
+    if conn.assigns[:current_user] do
+      conn
+    else
+      # TODO: Redirect to IdP login page
+      conn
+      |> redirect(to: "/auth")
     end
   end
 end

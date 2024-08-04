@@ -1,5 +1,6 @@
 defmodule ExampleClientWeb.Router do
   use ExampleClientWeb, :router
+  import ExampleClientWeb.Auth
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -18,6 +19,13 @@ defmodule ExampleClientWeb.Router do
     pipe_through :browser
 
     live "/", PublicLive
+    get "/auth", AuthController, :request
+    get "/auth/callback", AuthController, :callback
+  end
+
+  scope "/", ExampleClientWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
     live "/secret", SecretLive
   end
 
