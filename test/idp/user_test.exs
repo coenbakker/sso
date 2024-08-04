@@ -15,11 +15,11 @@ defmodule Idp.UserTest do
 
     user = %User{hashed_password: Bcrypt.hash_pwd_salt(correct_password)}
 
-    valid_time = exec_time(fn -> User.valid_password?(user, correct_password) end)
-    invalid_time = exec_time(fn -> User.valid_password?(user, wrong_password) end)
-    missing_time = exec_time(fn -> User.valid_password?(nil, correct_password) end)
+    correct_pw_time = exec_time(fn -> User.valid_password?(user, correct_password) end)
+    wrong_pw_time = exec_time(fn -> User.valid_password?(user, wrong_password) end)
+    missing_user_time = exec_time(fn -> User.valid_password?(nil, correct_password) end)
 
-    assert missing_time > valid_time * margin
-    assert missing_time > invalid_time * margin
+    assert missing_user_time > correct_pw_time * margin
+    assert missing_user_time > wrong_pw_time * margin
   end
 end
