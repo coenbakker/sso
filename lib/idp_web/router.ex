@@ -1,6 +1,5 @@
 defmodule IdpWeb.Router do
   use IdpWeb, :router
-
   import IdpWeb.UserAuth
 
   pipeline :browser do
@@ -21,6 +20,14 @@ defmodule IdpWeb.Router do
     pipe_through :browser
 
     live "/", HomeLive
+  end
+
+  scope "/oauth2", IdpWeb do
+    pipe_through :browser
+
+    get "/v1/auth", AuthController, :auth
+    get "/v1/token", AuthController, :token
+    get "/v1/userinfo", AuthController, :userinfo
   end
 
   # Other scopes may use custom stacks.

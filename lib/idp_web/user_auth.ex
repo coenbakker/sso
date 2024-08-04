@@ -1,9 +1,7 @@
 defmodule IdpWeb.UserAuth do
   use IdpWeb, :verified_routes
-
   import Plug.Conn
   import Phoenix.Controller
-
   alias Idp.Accounts
 
   # Make the remember me cookie valid for 60 days.
