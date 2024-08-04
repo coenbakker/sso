@@ -1,10 +1,9 @@
 defmodule IdpWeb.UserAuthTest do
   use IdpWeb.ConnCase, async: true
-
+  import Idp.AccountsFixtures
   alias Phoenix.LiveView
   alias Idp.Accounts
   alias IdpWeb.UserAuth
-  import Idp.AccountsFixtures
 
   @remember_me_cookie "_idp_web_user_remember_me"
 
