@@ -1,18 +1,26 @@
-# Idp
+# Identity Provider (IdP) for Single Sign-On (SSO) Service
 
-To start your Phoenix server:
+This repository contains the code for an Identity Provider (IdP) server that is part of a Single Sign-On (SSO) service. Additionally, it includes an example SSO client located in the example_client directory.
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+## Running the Application
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+### Identity Provider Server
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+To start the identity provider server:
 
-## Learn more
+	1.	Run mix setup to install and set up dependencies.
+	2.	Start the Phoenix endpoint with either `mix phx.server` or inside IEx with `iex -S mix phx.server`.
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+The identity provider server will be available on `http://localhost:4000`.
+
+### Example Client
+
+To start the example client:
+
+	1.	Navigate to the example_client directory.
+	2.	Run `mix setup` to install and set up dependencies.
+	3.	Start the Phoenix endpoint with either `mix phx.server` or inside IEx with `iex -S mix phx.server`.
+
+The example client server will be available on http://localhost:4001. Open a browser and go to http://localhost:4001 to find further instructions on how to use the example client.
+
+**Note**: Ensure that the identity provider server is running when trying out the example client.
