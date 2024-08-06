@@ -14,3 +14,5 @@ In order to demo the SSO service, you need to serve the authorization server and
 1. Run `mix setup` to install and set up dependencies.
 1. Start the Phoenix endpoint with either `mix phx.server` or inside IEx with `iex -S mix phx.server`.
 1. The example client server will be available on http://localhost:4001. Open a browser and go to `http://localhost:4001` to find further instructions on how to use the example client.
+
+**Important**: These instructions will work shortly, when the `feature/sso` branch is merged with the `main` branch. Can't wait? Go to the `feature/sso` branch to try out the SSO service while it is still in development.
