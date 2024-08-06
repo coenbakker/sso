@@ -17,13 +17,13 @@ In order to demo the SSO service, you need to serve the authorization server and
 
 **Important**: These instructions will work shortly, when the `feature/sso` branch is merged with the `main` branch. Can't wait? Go to the `feature/sso` branch to try out the SSO service while it is still in development.
 
-## Branches Info
+## Branches
 This repository currently contains four branches beside the `main` branch.
 
 The development branches will be merged with the `main` branch:
 1. **`feature/sso`**: On this branch the SSO service is being implemented. It will be merged with the `main` branch soon.
 
-The research branches serve for research only and will not be merged with the `main` branch:
+The research branches serve for research only and will NOT be merged with the `main` branch:
 1. **`feature/auth-flow-stub`**: SSO without the use of `mix phx.gen.auth`.
 1. **`feature/boruta`**: SSO with the Boruta package.
 1. **`feature/openid-connect`**: SSO with OpenID Connect.
