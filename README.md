@@ -28,12 +28,11 @@ The example client server will be available on http://localhost:4001. Open a bro
 ## Auth Flow
 This app uses an Authorization Code Flow with Proof Key for Code Exchange (PKCE).
 
-### Oauth 2.0 Documentation
-The following documentation resources can be useful when learning about the authorization protocol that we use.
-
+### Oauth 2.0 RFCs
 - OAuth 2.0 specifications (https://www.rfc-editor.org/rfc/rfc6749.html)
 - PKCE specifications (https://www.rfc-editor.org/rfc/rfc7636)
 - OAuth 2.0 Threat Model and Security Considerations (https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-threatmodel-08)
+- The above RFCs, plus others (https://oauth.net/books/The%20Little%20Book%20of%20OAuth%202.0%20RFCs.pdf)
 
 ### Terminology
 
