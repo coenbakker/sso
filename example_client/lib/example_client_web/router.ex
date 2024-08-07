@@ -16,6 +16,9 @@ defmodule ExampleClientWeb.Router do
 
   scope "/", ExampleClientWeb do
     pipe_through :browser
+
+    live "/", PublicLive
+    live "/private", PrivateLive
   end
 
   # Other scopes may use custom stacks.
