@@ -1,9 +1,9 @@
-defmodule Idp.MixProject do
+defmodule ExampleClient.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :idp,
+      app: :example_client,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule Idp.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Idp.Application, []},
+      mod: {ExampleClient.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -32,7 +32,6 @@ defmodule Idp.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.7"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.10"},
@@ -66,7 +65,6 @@ defmodule Idp.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "test.all": ["ecto.create --quiet", "ecto.migrate --quiet", "test_all"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind default", "esbuild default"],
       "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
