@@ -9,6 +9,7 @@ The development branches will be merged with the `main` branch:
 
 The research branches serve for research only and will NOT be merged with the `main` branch:
 1. **`feature/auth-flow-stub`**: SSO without the use of `mix phx.gen.auth`.
+2. **`feature/openid-connect`**: SSO based on OpenID Connect.
 
 ## Running the Application
 In order to demo the SSO service, you need to serve the authorization server and the example client at the same time.
