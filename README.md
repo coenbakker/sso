@@ -16,7 +16,7 @@ The research branches serve for research only and will NOT be merged with the `m
 ## Running the Application
 In order to demo the SSO service, you need to serve the authorization server and the example client at the same time.
 
-### Universal Authorization Server
+### Authorization Server
 1. Run `mix setup` to install and set up dependencies.
 1. Start the Phoenix endpoint with either `mix phx.server` or inside IEx with `iex -S mix phx.server`.
 1. The authorization server will be available on http://localhost:4000.
