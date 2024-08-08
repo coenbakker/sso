@@ -3,7 +3,7 @@ This repository houses the authorization server for a Single Sign-On (SSO) servi
 
 Users authenticate by logging into the authorization server using their credentials. Note that this server does not integrate with any third-party identity providers (e.g., Google, GitHub), meaning authentication is solely managed through the provided credentials.
 
-Additionally, this repository includes an example SSO client, which can be found in the /example_client directory.
+Additionally, this repository includes an example SSO client, which can be found in the `/example_client` directory.
 
 ## Branches
 This repository currently contains four branches beside the `main` branch.
