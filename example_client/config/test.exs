@@ -32,6 +32,8 @@ config :logger, level: :warning
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
 
+# Configure private and public RSA keys. These keys are for testing purposes
+# only and should not be used in production
 config :joken,
   private_key: [
     signer_alg: "RS256",
