@@ -1,5 +1,6 @@
 defmodule ExampleClientWeb.PageControllerTest do
   use ExampleClientWeb.ConnCase, async: true
+  alias ExampleClientWeb.JokenTestUtils
 
   @sso Application.compile_env(:example_client, :sso)
   @login_uri Keyword.get(@sso, :domain) <> Keyword.get(@sso, :endpoint)
@@ -13,14 +14,13 @@ defmodule ExampleClientWeb.PageControllerTest do
   end
 
   describe "private/2" do
-    test "redirects to login page when user is not authenticated", %{conn: conn} do
+    test "redirects to login page when authorization header is missing", %{conn: conn} do
       conn = get(conn, "/private")
       assert redirected_to(conn) == @login_uri
     end
 
-    test "the private page is accessible when user is authenticated", %{conn: conn} do
-      # TODO: Replace with a valid access token
-      valid_access_token = "replace_with_valid_access_token"
+    test "grants access when authorization header is valid", %{conn: conn} do
+      valid_access_token = JokenTestUtils.build_access_token!()
 
       conn =
         conn
@@ -28,6 +28,29 @@ defmodule ExampleClientWeb.PageControllerTest do
         |> get("/private")
 
       assert html_response(conn, 200) =~ "The Private Page"
+    end
+
+    test "redirects to login page when authorization header is expired", %{conn: conn} do
+      expired_access_token = JokenTestUtils.build_expired_access_token!()
+
+      conn =
+        conn
+        |> put_req_header("authorization", "Bearer #{expired_access_token}")
+        |> get("/private")
+
+      assert redirected_to(conn) == @login_uri
+    end
+
+    test "redirects to login page when authorization header is invalid", %{conn: conn} do
+      invalid_access_token =
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MjQwNzQwMzYsImlhdCI6MTYyNDA3MzIzNiwiaXNzIjoiZXhhbXBsZV9jbGllbnQiLCJqdGkiOiJk"
+
+      conn =
+        conn
+        |> put_req_header("authorization", "Bearer #{invalid_access_token}")
+        |> get("/private")
+
+      assert redirected_to(conn) == @login_uri
     end
   end
 end
