@@ -5,7 +5,6 @@ defmodule ExampleClientWeb.UserAuth do
 
   @sso Application.compile_env(:example_client, :sso)
   @login_uri Keyword.get(@sso, :domain) <> Keyword.get(@sso, :endpoint)
-  @public_key struct(Joken.Signer, Keyword.get(@sso, :public_key))
 
   def require_authenticated_user(conn, _opts) do
     if valid_access_token_in_header?(conn) do
@@ -40,7 +39,7 @@ defmodule ExampleClientWeb.UserAuth do
   end
 
   defp valid_access_token?(access_token) do
-    with {:ok, claims} <- Joken.verify(access_token, @public_key),
+    with {:ok, claims} <- Joken.verify(access_token, Joken.Signer.parse_config(:public_key)),
          {:ok, exp} <- fetch_expiration_claim(claims),
          {:ok, _} <- check_access_token_not_expired(exp) do
       true
