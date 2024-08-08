@@ -33,18 +33,18 @@ config :joken,
     signer_alg: "RS256",
     key_pem: """
     -----BEGIN PUBLIC KEY-----
-    MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAq0e7KhzB1RmAfxjqrJHE
-    9cPcEY1X4GecwwSE4L+P1MghSDGVfG5Tbag107ENS6+e1PyH8M1f+btpSOuB0CvT
-    zMSlvYQvm+QK0rRdI4mfbEFnb4fSqm8h7avzNBOOGJ6Hd14MKYXRPgw1nQ17d9V6
-    Rk9Yr2gjq11/iAleFOCKuqXNT3IHwGIrDAjbGteNkhfritWCEPLo5V97rNVirr91
-    1HKdmkrRe7D0kHPF2YnEqvDBEsiDrFeiVCsz/QloOa4dJidu2e2z+RsvCYPWkYVJ
-    nhy4VZ8E/mZG3xI9hJTWKnFM3SAvri/fch7RgFTtnHXTKF1HoZC+0oS6mcrxnnWR
-    eWQBPurTtlfw0YPHzGAzF7VlK+c5RFL8ZvzlU5d/wMLwzr50Ba4xwD1AbB+h419z
-    X5ApWVTZOlBOgu8OC4wYnvFws0s1om/HPXsBxXoRHUqKMgXtxgJv6zQEglHjeWbb
-    36ejSdeE8+wM2LM6js0Vl0CcJT09HfwKzoSH8N67RVBOvl/DDJO2JlhKkjWhqk2e
-    nFaFc05UajY+zLRpfbB5LkgWXe+HEAEdagkj3EEpBQ81W9CQxysTnBTX5EssHqxR
-    dmiwKTT1PK1i3dqAWRElHKcRT8zo71UFpxrDSNJNXkUCt4ThVOX1SpjYYrJsDtHr
-    xoP25oM0exZnwNheFuKvCDUCAwEAAQ==
+    MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA3aJ8TlGe0MnM0DtVqVuI
+    ++G7HItLdebXOVYh/eosPBEWcR5eTiVwNqr+fzvE4P83tP2jvukdEX0/UFHJzkRf
+    lndo4f7CoeH6WsxKX2s5jVl7vEILoF8miUHQ/k6JYW5bBjfYzhZ+J1LdBrgXzlha
+    gRv42xbx0i3NP4oJKnqGt+o+wBePG02wwhE6oRjJr4461Du8hOR758rwrnnMTl7F
+    7DAgvPbE0CGMbjAFyjbmABAovNectiBdb0BzQZXO79c8weqdUuhpldhmg2KemD6T
+    ykQXsRZwVDDIh+atF8zPxk59wB/jt/kasYmmDHIkBAtmORsxwVmYcCT8BJ9kOd70
+    4VisBMRYipyLfa3o+Y3GyUOXnzfzKOaZ+HBAA/N78USCYrJjYPGH77yYEORq2tSZ
+    VB/zyOOjTIGPXVsnxNpxWeCS0DrjQSFSnIn4xqmc/5baaZd3ZclHH15CSD032oMg
+    ro9A/JmLnF74a/ObjEIIbZm+uAnem8uRxHR0lkhmsqi7YqIRUhiHBkGtfNh6kkgp
+    gr7lSknbNeYNnnK+JULNerfnaD1V4H5dMrmz22jvrTZlOFgRKIRH6DueFs6UCjzY
+    C9djtreP3TyRD1NTUqorcw6QG7e0prhAbtUh5JtoSztzPPjpvfUPtliuEl/lEeaT
+    Qles0WAsjRcTd97YoswVAM0CAwEAAQ==
     -----END PUBLIC KEY-----
     """
   ]
