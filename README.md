@@ -1,5 +1,9 @@
-# Universal Authorization Server for a Single Sign-On (SSO) service
-This repository contains the universal authorization server of a Single Sign-On (SSO) service. Additionally, it contains an example SSO client located in the `/example_client` directory.
+# Authorization Server for a Single Sign-On (SSO) service
+This repository houses the authorization server for a Single Sign-On (SSO) service.
+
+Users authenticate by logging into the authorization server using their credentials. Note that this server does not integrate with any third-party identity providers (e.g., Google, GitHub), meaning authentication is solely managed through the provided credentials.
+
+Additionally, this repository includes an example SSO client, which can be found in the /example_client directory.
 
 ## Branches
 This repository currently contains four branches beside the `main` branch.
