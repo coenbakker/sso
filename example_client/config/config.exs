@@ -25,6 +25,30 @@ config :example_client, :sso,
   domain: "http://localhost:4000",
   endpoint: "/authorize"
 
+# Configures the public key belonging to the authentication server's private
+# key. The client application must request the public key from the
+# authentication server.
+config :joken,
+  public_key: [
+    signer_alg: "RS256",
+    key_pem: """
+    -----BEGIN PUBLIC KEY-----
+    MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAq0e7KhzB1RmAfxjqrJHE
+    9cPcEY1X4GecwwSE4L+P1MghSDGVfG5Tbag107ENS6+e1PyH8M1f+btpSOuB0CvT
+    zMSlvYQvm+QK0rRdI4mfbEFnb4fSqm8h7avzNBOOGJ6Hd14MKYXRPgw1nQ17d9V6
+    Rk9Yr2gjq11/iAleFOCKuqXNT3IHwGIrDAjbGteNkhfritWCEPLo5V97rNVirr91
+    1HKdmkrRe7D0kHPF2YnEqvDBEsiDrFeiVCsz/QloOa4dJidu2e2z+RsvCYPWkYVJ
+    nhy4VZ8E/mZG3xI9hJTWKnFM3SAvri/fch7RgFTtnHXTKF1HoZC+0oS6mcrxnnWR
+    eWQBPurTtlfw0YPHzGAzF7VlK+c5RFL8ZvzlU5d/wMLwzr50Ba4xwD1AbB+h419z
+    X5ApWVTZOlBOgu8OC4wYnvFws0s1om/HPXsBxXoRHUqKMgXtxgJv6zQEglHjeWbb
+    36ejSdeE8+wM2LM6js0Vl0CcJT09HfwKzoSH8N67RVBOvl/DDJO2JlhKkjWhqk2e
+    nFaFc05UajY+zLRpfbB5LkgWXe+HEAEdagkj3EEpBQ81W9CQxysTnBTX5EssHqxR
+    dmiwKTT1PK1i3dqAWRElHKcRT8zo71UFpxrDSNJNXkUCt4ThVOX1SpjYYrJsDtHr
+    xoP25oM0exZnwNheFuKvCDUCAwEAAQ==
+    -----END PUBLIC KEY-----
+    """
+  ]
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
