@@ -7,8 +7,9 @@ defmodule ExampleClientWeb.AuthControllerTest do
 
   test "valid access token grants access to /private", %{conn: conn} do
     valid_access_token = JokenTestUtils.build_access_token!()
+    valid_resource_token = JokenTestUtils.build_resource_token!("/private")
 
-    conn = get(conn, "/callback?access_token=#{valid_access_token}")
+    conn = get(conn, "/callback?access_token=#{valid_access_token}&resource=#{valid_resource_token}")
     assert "/private" = redir_path = redirected_to(conn)
 
     conn = get(recycle(conn), redir_path)
@@ -16,7 +17,8 @@ defmodule ExampleClientWeb.AuthControllerTest do
   end
 
   test "invalid access token redirects to SSO login endpoint", %{conn: conn} do
-    conn = get(conn, "/callback?access_token=invalid_access_token")
+    valid_resource_token = JokenTestUtils.build_resource_token!("/private")
+    conn = get(conn, "/callback?access_token=invalid_access_token&resource=#{valid_resource_token}")
     assert "/private" = redir_path = redirected_to(conn)
 
     conn = get(recycle(conn), redir_path)
