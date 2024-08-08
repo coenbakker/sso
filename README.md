@@ -30,4 +30,4 @@ In order to demo the SSO service, you need to serve the authorization server and
 ## Feature Roadmap
 1. A Mix task for Phoenix clients for generating SSO client code.
 1. A Mix task for Phoenix authorization servers for generating SSO server code.
-1. A package that allows non-Phoenix clients to easily set up an Assent strategy.
+1. A package that allows to easily set up an Assent strategy.
