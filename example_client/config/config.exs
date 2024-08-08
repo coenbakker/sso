@@ -20,6 +20,11 @@ config :example_client, ExampleClientWeb.Endpoint,
   pubsub_server: ExampleClient.PubSub,
   live_view: [signing_salt: "hzf7Dqkk"]
 
+# Configures the Single Sign-On (SSO) provider
+config :example_client, :sso,
+  domain: "http://localhost:4000",
+  endpoint: "/authorize"
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

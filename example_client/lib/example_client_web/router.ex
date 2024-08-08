@@ -1,5 +1,6 @@
 defmodule ExampleClientWeb.Router do
   use ExampleClientWeb, :router
+  import ExampleClientWeb.UserAuth
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -17,8 +18,13 @@ defmodule ExampleClientWeb.Router do
   scope "/", ExampleClientWeb do
     pipe_through :browser
 
-    live "/", PublicLive
-    live "/private", PrivateLive
+    get "/", PageController, :public
+  end
+
+  scope "/", ExampleClientWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    get "/private", PageController, :private
   end
 
   # Other scopes may use custom stacks.
