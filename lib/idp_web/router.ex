@@ -22,9 +22,10 @@ defmodule IdpWeb.Router do
     live "/", HomeLive
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", IdpWeb do
-  #   pipe_through :api
+  # scope "/auth/v1" do
+  #   pipe_through :browser
+
+  #   get "/authorize", AuthController, :authorize
   # end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
