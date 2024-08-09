@@ -23,11 +23,11 @@ defmodule IdpWeb.Router do
     live "/", HomeLive
   end
 
-  scope "/auth/v1" do
-    pipe_through :browser
+  # scope "/auth/v1" do
+  #   pipe_through :browser
 
-    get "/authorize", AuthController, :authorize
-  end
+  #   get "/authorize", AuthController, :authorize
+  # end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:idp, :dev_routes) do
