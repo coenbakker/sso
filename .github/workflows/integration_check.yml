@@ -71,10 +71,14 @@ jobs:
       run: |
         mix deps.clean --all
         mix clean
+        cd example_client && mix deps.clean --all
+        cd example_client && mix clean
       shell: sh
 
     - name: Install dependencies
-      run: mix deps.get
+      run: |
+        mix deps.get
+        cd example_client && mix deps.get
 
     - name: Deploy assets
       run: |
