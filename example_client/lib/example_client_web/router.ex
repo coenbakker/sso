@@ -19,6 +19,7 @@ defmodule ExampleClientWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :public
+    get "/callback", AuthController, :callback
   end
 
   scope "/", ExampleClientWeb do
