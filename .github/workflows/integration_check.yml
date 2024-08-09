@@ -77,13 +77,14 @@ jobs:
       run: mix deps.get
 
     - name: Deploy assets
-      run: mix assets.deploy
+      run: |
+        mix assets.deploy
+        cd example_client && mix assets.deploy
 
     - name: Compiles without warnings
-      run: mix compile --warnings-as-errors
-
-    - name: Example client compiles without warnings
-      run: cd example_client && mix compile --warnings-as-errors
+      run: |
+        mix compile --warnings-as-errors
+        cd example_client && mix compile --warnings-as-errors
 
     - name: Check Formatting
       run: mix format.all --check-formatted
@@ -92,4 +93,4 @@ jobs:
       run: mix test.all
 
     - name: Check migrations
-      run: mix ecto.rollback — all
+      run: mix ecto.rollback —-all
