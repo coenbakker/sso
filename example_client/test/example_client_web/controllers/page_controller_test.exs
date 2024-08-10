@@ -52,5 +52,16 @@ defmodule ExampleClientWeb.PageControllerTest do
 
       assert redirected_to(conn) == @login_uri
     end
+
+    test "redirects to login page when scope does not match the request path", %{conn: conn} do
+      valid_access_token = JokenTestUtils.build_access_token!("/public")
+
+      conn =
+        conn
+        |> put_req_header("authorization", "Bearer #{valid_access_token}")
+        |> get("/private")
+
+      assert redirected_to(conn) == @login_uri
+    end
   end
 end
