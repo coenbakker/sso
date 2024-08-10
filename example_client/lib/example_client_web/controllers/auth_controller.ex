@@ -2,9 +2,9 @@ defmodule ExampleClientWeb.AuthController do
   use ExampleClientWeb, :controller
 
   def callback(conn, params) do
-    {:ok, claims} = Joken.verify(params["access_token"], Joken.Signer.parse_config(:public_key))
+    conn = fetch_session(conn)
 
-    case fetch_and_validate_resource(claims) do
+    case fetch_and_validate_resource(conn) do
       {:ok, resource} ->
         conn
         |> put_req_header("authorization", "Bearer #{params["access_token"]}")
@@ -12,49 +12,34 @@ defmodule ExampleClientWeb.AuthController do
 
       {:error, _} ->
         conn
+        |> put_flash(
+          :error,
+          "Something went wrong while processing your request. Try again later."
+        )
+        |> redirect(to: "/")
     end
   end
 
-  defp fetch_and_validate_resource(claims) do
-    with {:ok, scope} <- fetch_scope_from_claims(claims),
-         {:ok, scope} <- check_scope_is_binary(scope),
-         {:ok, resource} <- check_scope_is_valid_resource(scope) do
+  defp fetch_and_validate_resource(conn) do
+    with {:ok, resource} <- fetch_return_to_resource(conn),
+         {:ok, _} <- check_resource_exists(resource) do
       {:ok, resource}
     end
   end
 
-  defp fetch_scope_from_claims(claims) do
-    case Map.fetch(claims, "scope") do
-      {:ok, scope} -> {:ok, scope}
-      _ -> {:error, :scope_missing}
+  defp fetch_return_to_resource(conn) do
+    conn
+    |> get_session("return_to_resource")
+    |> case do
+      nil -> {:error, :return_to_resource_missing}
+      resource -> {:ok, resource}
     end
   end
 
-  defp check_scope_is_binary(scope) do
-    case is_binary(scope) do
-      true -> {:ok, scope}
-      false -> {:error, :scope_invalid}
-    end
-  end
-
-  defp check_scope_is_valid_resource(scope) do
-    with {:ok, scope} <- check_one_scope_only(scope),
-         {:ok, _} <- check_path_exists(scope) do
-      {:ok, scope}
-    end
-  end
-
-  defp check_one_scope_only(scope) do
-    case String.split(scope, " ") do
-      [scope] -> {:ok, scope}
-      _ -> {:error, :scope_invalid}
-    end
-  end
-
-  defp check_path_exists(path) do
-    case Phoenix.Router.route_info(ExampleClientWeb.Router, "GET", path, "") do
+  defp check_resource_exists(resource) do
+    case Phoenix.Router.route_info(ExampleClientWeb.Router, "GET", resource, "") do
       :error -> {:error, :resource_not_found}
-      _ -> {:ok, path}
+      _ -> {:ok, resource}
     end
   end
 end

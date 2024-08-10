@@ -7,12 +7,22 @@ defmodule ExampleClientWeb.UserAuth do
   @login_uri Keyword.get(@sso, :domain) <> Keyword.get(@sso, :endpoint)
 
   def require_authenticated_user(conn, _opts) do
-    if valid_access_token_in_header?(conn) do
+    with {:ok, claims} <- valid_access_token_in_header?(conn),
+         {:ok, _} <- check_scope_match(claims, conn.request_path) do
       conn
     else
-      conn
-      |> redirect(external: @login_uri)
-      |> halt()
+      _ ->
+        conn
+        |> redirect(external: @login_uri)
+        |> halt()
+    end
+  end
+
+  defp check_scope_match(claims, path) do
+    if Map.get(claims, "scope") == path do
+      {:ok, path}
+    else
+      {:error, :scope_mismatch}
     end
   end
 
@@ -20,7 +30,7 @@ defmodule ExampleClientWeb.UserAuth do
     conn
     |> get_access_token_from_header()
     |> case do
-      nil -> false
+      nil -> {:error, :missing_access_token}
       access_token -> valid_access_token?(access_token)
     end
   end
@@ -42,9 +52,9 @@ defmodule ExampleClientWeb.UserAuth do
     with {:ok, claims} <- Joken.verify(access_token, Joken.Signer.parse_config(:public_key)),
          {:ok, exp} <- fetch_expiration_claim(claims),
          {:ok, _} <- check_access_token_not_expired(exp) do
-      true
+      {:ok, claims}
     else
-      _ -> false
+      _ -> {:error, :invalid_access_token}
     end
   end
 
