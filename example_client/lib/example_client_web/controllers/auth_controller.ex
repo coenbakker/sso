@@ -12,7 +12,10 @@ defmodule ExampleClientWeb.AuthController do
 
       {:error, _} ->
         conn
-        |> put_flash(:error, "Something went wrong while processing your request. Try again later.")
+        |> put_flash(
+          :error,
+          "Something went wrong while processing your request. Try again later."
+        )
         |> redirect(to: "/")
     end
   end
