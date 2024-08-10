@@ -25,15 +25,22 @@ defmodule IdpWeb.UserAuth do
   disconnected on log out. The line can be safely removed
   if you are not using LiveView.
   """
-  def log_in_user(conn, user, params \\ %{}) do
+  def log_in_user(conn, user, params \\ %{}, opts \\ []) do
     token = Accounts.generate_user_session_token(user)
-    user_return_to = get_session(conn, :user_return_to)
+    return_to = get_return_to(conn, opts)
 
     conn
     |> renew_session()
     |> put_token_in_session(token)
     |> maybe_write_remember_me_cookie(token, params)
-    |> redirect(to: user_return_to || signed_in_path(conn))
+    |> redirect(to: return_to || signed_in_path(conn))
+  end
+
+  defp get_return_to(conn, opts) do
+    case Keyword.get(opts, :has_external_return_to, false) do
+      true -> get_session(conn, :return_to_resource)
+      false -> get_session(conn, :user_return_to)
+    end
   end
 
   defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do

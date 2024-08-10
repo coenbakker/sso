@@ -1,5 +1,6 @@
 defmodule IdpWeb.AuthController do
   use IdpWeb, :controller
+  import Phoenix.Component, only: [to_form: 2]
 
   @oauth_login_url "/auth/v1/log_in"
 
@@ -20,5 +21,10 @@ defmodule IdpWeb.AuthController do
 
     conn
     |> redirect(to: @oauth_login_url)
+  end
+
+  def log_in(conn, _params) do
+    conn
+    |> render("log_in.html", %{form: to_form(%{}, as: "user")})
   end
 end

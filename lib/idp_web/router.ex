@@ -27,6 +27,7 @@ defmodule IdpWeb.Router do
     pipe_through :browser
 
     get "/authorize", AuthController, :authorize
+    get "/log_in", AuthController, :log_in
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
