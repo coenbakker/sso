@@ -23,7 +23,7 @@ defmodule IdpWeb.Router do
     live "/", HomeLive
   end
 
-  scope "/auth/v1" do
+  scope "/auth/v1", IdpWeb do
     pipe_through :browser
 
     get "/authorize", AuthController, :authorize

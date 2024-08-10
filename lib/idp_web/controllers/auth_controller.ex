@@ -1,19 +1,24 @@
 defmodule IdpWeb.AuthController do
   use IdpWeb, :controller
 
+  @oauth_login_url "/auth/v1/log_in"
+
+  # TODO: Continue here
+
   def authorize(conn, _params) do
-    # Check client_id and redirect_uri
+    # WITH
+    # Validate required parameters
+    # Validate client_id registration
+    # Validate redirect_uri registration
+    # Check for existing session using user_token
     #
-    # Check session for user_token
-    #   If user_token is present, validate it
-    #     If user_token is valid, redirect to /callback
-    #     If user_token is invalid, redirect to login page
-    #   If user_token is not present, redirect to login page
+    # DO
+    # Make GET request to /auth/v1/authorize
     #
-    # Get requested scopes
-    # Sign scopes
+    # ELSE
+    # Redirect to /auth/v1/log_in
 
     conn
-    |> redirect(to: "/auth/v1/log_in")
+    |> redirect(to: @oauth_login_url)
   end
 end
