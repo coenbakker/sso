@@ -2,7 +2,7 @@ defmodule ExampleClientWeb.AuthController do
   use ExampleClientWeb, :controller
 
   def callback(conn, params) do
-    conn = Plug.Conn.fetch_session(conn)
+    conn = fetch_session(conn)
 
     case fetch_and_validate_resource(conn) do
       {:ok, resource} ->
@@ -12,51 +12,31 @@ defmodule ExampleClientWeb.AuthController do
 
       {:error, _} ->
         conn
+        |> put_flash(:error, "Something went wrong while processing your request. Try again later.")
+        |> redirect(to: "/")
+    end
+  end
+
+  defp fetch_and_validate_resource(conn) do
+    with {:ok, resource} <- fetch_return_to_resource(conn),
+         {:ok, _} <- check_resource_exists(resource) do
+      {:ok, resource}
     end
   end
 
   defp fetch_return_to_resource(conn) do
     conn
-    |> Plug.Conn.get_session("return_to_resource")
+    |> get_session("return_to_resource")
     |> case do
       nil -> {:error, :return_to_resource_missing}
       resource -> {:ok, resource}
     end
   end
 
-  defp fetch_and_validate_resource(conn) do
-    with {:ok, resource} <- fetch_return_to_resource(conn),
-         {:ok, _} <- check_scope_is_binary(resource),
-         {:ok, _} <- check_scope_is_valid_resource(resource) do
-      {:ok, resource}
-    end
-  end
-
-  defp check_scope_is_binary(scope) do
-    case is_binary(scope) do
-      true -> {:ok, scope}
-      false -> {:error, :scope_invalid}
-    end
-  end
-
-  defp check_scope_is_valid_resource(scope) do
-    with {:ok, scope} <- check_one_scope_only(scope),
-         {:ok, _} <- check_path_exists(scope) do
-      {:ok, scope}
-    end
-  end
-
-  defp check_one_scope_only(scope) do
-    case String.split(scope, " ") do
-      [scope] -> {:ok, scope}
-      _ -> {:error, :scope_invalid}
-    end
-  end
-
-  defp check_path_exists(path) do
-    case Phoenix.Router.route_info(ExampleClientWeb.Router, "GET", path, "") do
+  defp check_resource_exists(resource) do
+    case Phoenix.Router.route_info(ExampleClientWeb.Router, "GET", resource, "") do
       :error -> {:error, :resource_not_found}
-      _ -> {:ok, path}
+      _ -> {:ok, resource}
     end
   end
 end
