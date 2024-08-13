@@ -23,16 +23,14 @@ defmodule IdpWeb.AuthController do
       {:user_token_not_found, conn} ->
         redirect(conn, to: @oauth_login_path)
 
-      {:error, :invalid_client_registration} ->
+      {:error, :unknown_client} ->
         conn
-        |> put_flash(:error, "Invalid client registration")
         |> put_status(:bad_request)
         |> put_view(IdpWeb.ErrorHTML)
         |> render(:invalid_oauth_registration)
 
-      {:error, reason} ->
+      {:error, :missing_params} ->
         conn
-        |> put_flash(:error, reason)
         |> put_status(:bad_request)
         |> put_view(IdpWeb.ErrorHTML)
         |> render(:oauth_params_missing)
@@ -47,7 +45,7 @@ defmodule IdpWeb.AuthController do
     if Enum.all?(@required_authorize_params, &Map.has_key?(conn.params, &1)) do
       {:ok, conn}
     else
-      {:error, "Missing required parameters"}
+      {:error, :missing_params}
     end
   end
 
@@ -58,7 +56,7 @@ defmodule IdpWeb.AuthController do
     if client && client.redirect_uri == conn.params["redirect_uri"] do
       {:ok, conn}
     else
-      {:error, :invalid_client_registration}
+      {:error, :unknown_client}
     end
   end
 
