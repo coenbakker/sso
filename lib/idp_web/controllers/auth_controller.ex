@@ -3,9 +3,9 @@ defmodule IdpWeb.AuthController do
   import Phoenix.Component, only: [to_form: 2]
   alias Idp.Clients
 
-  @callback_url "http://localhost:4000/auth/v1/callback"
   @oauth_login_path "/auth/v1/log_in"
   @remember_me_cookie "_idp_web_user_remember_me"
+  @required_authorize_params ~w(client_id redirect_uri)
 
   # TODO
   # Add tests for the controller
@@ -13,12 +13,12 @@ defmodule IdpWeb.AuthController do
 
   def authorize(conn, _params) do
     with {:ok, _} <- check_required_params(conn),
-         {:ok, _} <- check_client_registration(conn),
+         #  {:ok, _} <- check_client_registration(conn),
          {:existing_user_token, conn} <- check_user_token(conn) do
       # TODO
       # Generate signed access token
       # Redirect to callback URL with access token
-      redirect(conn, to: @callback_url)
+      redirect(conn, to: conn.params["redirect_uri"])
     else
       {:no_user_token, conn} ->
         redirect(conn, to: @oauth_login_path)
@@ -35,27 +35,22 @@ defmodule IdpWeb.AuthController do
   end
 
   defp check_required_params(conn) do
-    case conn.params do
-      # TODO
-      # Add all required parameters
-      # Use @required_authorize_params module attribute
-      %{"client_id" => _, "redirect_uri" => _} ->
-        {:ok, conn}
-
-      _ ->
-        {:error, "Missing required parameters"}
-    end
-  end
-
-  defp check_client_registration(conn) do
-    client = Clients.get_client_by_id(conn.params["client_id"])
-
-    if client && client.redirect_uri == conn.params["redirect_uri"] do
+    if Enum.all?(@required_authorize_params, &Map.has_key?(conn.params, &1)) do
       {:ok, conn}
     else
-      {:error, "Invalid client_id and/or redirect_uri"}
+      {:error, "Missing required parameters"}
     end
   end
+
+  # defp check_client_registration(conn) do
+  #   client = Clients.get_client_by_id(conn.params["client_id"])
+
+  #   if client && client.redirect_uri == conn.params["redirect_uri"] do
+  #     {:ok, conn}
+  #   else
+  #     {:error, "Invalid client_id and/or redirect_uri"}
+  #   end
+  # end
 
   defp check_user_token(conn) do
     if get_session(conn, :user_token) do

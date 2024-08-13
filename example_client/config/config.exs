@@ -20,10 +20,18 @@ config :example_client, ExampleClientWeb.Endpoint,
   pubsub_server: ExampleClient.PubSub,
   live_view: [signing_salt: "hzf7Dqkk"]
 
+# TODO: Set a real client ID
 # Configures the Single Sign-On (SSO) provider
+# Required keys are:
+#   - `:domain` - The domain of the SSO provider
+#   - `:endpoint` - The path of the authorize endpoint
+#   - `:client_id` - The client ID given by the SSO provider to the client application
+#   - `:redirect_uri` - The URI to redirect to after the user has been authenticated
 config :example_client, :sso,
   domain: "http://localhost:4000",
-  endpoint: "/authorize"
+  endpoint: "/auth/v1/authorize",
+  client_id: "example_client_id",
+  redirect_uri: "/auth/v1/callback"
 
 # Configures the public key belonging to the authentication server's private
 # key. The client application must request the public key from the

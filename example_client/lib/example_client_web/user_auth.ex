@@ -4,14 +4,13 @@ defmodule ExampleClientWeb.UserAuth do
   import Phoenix.Controller
 
   @sso Application.compile_env(:example_client, :sso)
-  @login_uri Keyword.get(@sso, :domain) <> Keyword.get(@sso, :endpoint)
 
   def require_authenticated_user(conn, _opts) do
     if valid_access_token_in_header?(conn) do
       conn
     else
       conn
-      |> redirect(external: @login_uri)
+      |> redirect(external: build_sso_login_url(@sso))
       |> halt()
     end
   end
@@ -63,5 +62,14 @@ defmodule ExampleClientWeb.UserAuth do
     else
       {:ok, "token not expired"}
     end
+  end
+
+  defp build_sso_login_url(sso) do
+    domain = Keyword.get(sso, :domain)
+    endpoint = Keyword.get(sso, :endpoint)
+    client_id = Keyword.get(sso, :client_id)
+    redirect_uri = Keyword.get(sso, :redirect_uri)
+
+    "#{domain}#{endpoint}?client_id=#{client_id}&redirect_uri=#{domain}#{redirect_uri}"
   end
 end
