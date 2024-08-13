@@ -3,14 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Internal Server Error</title>
+    <title>Bad Request</title>
     <link rel="stylesheet" href="/assets/app.css" />
     <script defer type="text/javascript" src="/assets/app.js">
     </script>
   </head>
   <body>
     <main>
-      <p class="p-10">Oops, an internal server error occurred.</p>
+      <p class="p-10">Invalid SSO client registration.</p>
+      <.link href={@redirect_uri} class="p-10 text-blue-700 underline">
+        Return to client domain
+      </.link>
     </main>
   </body>
 </html>

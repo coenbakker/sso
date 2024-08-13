@@ -1,9 +1,8 @@
-defmodule Idb.Clients.Client do
+defmodule Idp.Clients.Client do
   use Ecto.Schema
 
-  @primary_key {:uuid, :binary_id, autogenerate: true}
-
   schema "clients" do
+    field :client_id, :string
     field :redirect_uri, :string
 
     timestamps()

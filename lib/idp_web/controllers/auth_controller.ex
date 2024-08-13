@@ -1,7 +1,7 @@
 defmodule IdpWeb.AuthController do
   use IdpWeb, :controller
   import Phoenix.Component, only: [to_form: 2]
-  # alias Idp.Clients
+  alias Idp.Clients
 
   @oauth_login_path "/auth/v1/log_in"
   @remember_me_cookie "_idp_web_user_remember_me"
@@ -14,26 +14,26 @@ defmodule IdpWeb.AuthController do
   def authorize(conn, _params) do
     with {:ok, _} <- check_required_params(conn),
          {:ok, _} <- check_client_registration(conn),
-         {:user_token_found, conn} <- check_user_token(conn) do
+         {:token_found, conn} <- check_user_token(conn) do
       # TODO
       # Generate signed access token
       # Redirect to callback URL with access token
-      redirect(conn, to: conn.params["redirect_uri"])
+      redirect(conn, external: conn.params["redirect_uri"])
     else
-      {:user_token_not_found, conn} ->
+      {:token_not_found, conn} ->
         redirect(conn, to: @oauth_login_path)
 
       {:error, :unknown_client} ->
         conn
         |> put_status(:bad_request)
         |> put_view(IdpWeb.ErrorHTML)
-        |> render(:invalid_oauth_registration)
+        |> render(:invalid_registration, redirect_uri: conn.params["redirect_uri"])
 
       {:error, :missing_params} ->
         conn
         |> put_status(:bad_request)
         |> put_view(IdpWeb.ErrorHTML)
-        |> render(:oauth_params_missing)
+        |> render(:missing_authorize_params, redirect_uri: conn.params["redirect_uri"])
     end
   end
 
@@ -41,6 +41,7 @@ defmodule IdpWeb.AuthController do
     render(conn, "log_in.html", %{form: to_form(%{}, as: "user")})
   end
 
+  # TODO: Put private functions in a separate module
   defp check_required_params(conn) do
     if Enum.all?(@required_authorize_params, &Map.has_key?(conn.params, &1)) do
       {:ok, conn}
@@ -50,8 +51,7 @@ defmodule IdpWeb.AuthController do
   end
 
   defp check_client_registration(conn) do
-    # client = Clients.get_client_by_id(conn.params["client_id"])
-    client = nil
+    client = Clients.get_client_by_client_id(conn.params["client_id"])
 
     if client && client.redirect_uri == conn.params["redirect_uri"] do
       {:ok, conn}
@@ -62,14 +62,14 @@ defmodule IdpWeb.AuthController do
 
   defp check_user_token(conn) do
     if get_session(conn, :user_token) do
-      {:user_token_found, conn}
+      {:token_found, conn}
     else
       conn = fetch_cookies(conn, signed: [@remember_me_cookie])
 
       if token = conn.cookies[@remember_me_cookie] do
-        {:user_token_found, put_token_in_session(conn, token)}
+        {:token_found, put_token_in_session(conn, token)}
       else
-        {:user_token_not_found, conn}
+        {:token_not_found, conn}
       end
     end
   end

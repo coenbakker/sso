@@ -1,12 +1,16 @@
 defmodule IdpWeb.AuthControllerTest do
   use IdpWeb.ConnCase, async: true
+  alias Idp.Repo
+  alias Idp.Clients.Client
 
   @oauth_login_url "/auth/v1/log_in"
 
   describe "authorize/2" do
     test "redirects to login page when user token is missing from session", %{conn: conn} do
+      Repo.insert!(%Client{client_id: "123", redirect_uri: "https://page.com/callback"})
+
       query_string =
-        "client_id=123&redirect_uri=http://localhost:4000/callback&response_type=id_token%20token&scope=openid"
+        "client_id=123&redirect_uri=https://page.com/callback&response_type=id_token%20token&scope=openid"
 
       conn =
         conn
@@ -16,24 +20,29 @@ defmodule IdpWeb.AuthControllerTest do
       assert redirected_to(conn) == @oauth_login_url
     end
 
-    test "redirects to authorize error page when required params are missing", %{conn: conn} do
+    test "redirects to callback URL with signed access token when user token is present in session", %{conn: conn} do
+      Repo.insert!(%Client{client_id: "123", redirect_uri: "https://page.com/callback"})
+
+      query_string =
+        "client_id=123&redirect_uri=https://page.com/callback&response_type=id_token%20token&scope=openid"
+
+      conn =
+        conn
+        |> Plug.Test.init_test_session(user_token: "user_token")
+        |> get("/auth/v1/authorize?#{query_string}")
+
+      assert  "https://page.com/callback?access_token" <> token = redirected_to(conn)
+      assert String.length(token) > 0
+    end
+
+    test "fails when required params are missing", %{conn: conn} do
       conn = get(conn, "/auth/v1/authorize")
       assert html_response(conn, 400) =~ "Missing required parameters"
     end
 
-    test "redirects to authorize error page when client is not registered", %{conn: conn} do
-      conn = get(conn, "/auth/v1/authorize?client_id=123&redirect_uri=http://localhost:4000/callback")
-      assert html_response(conn, 400) =~ "Invalid OAuth 2.0 client registration"
-    end
-  end
-
-  describe "authorize_error_page/2" do
-    test "renders the error page", %{conn: _conn} do
-      assert true
-    end
-
-    test "contains link to client's redirect_uri", %{conn: _conn} do
-      assert true
+    test "fails when client is not registered", %{conn: conn} do
+      conn = get(conn, "/auth/v1/authorize?client_id=123&redirect_uri=https://page.com/callback")
+      assert html_response(conn, 400) =~ "Invalid SSO client registration"
     end
   end
 

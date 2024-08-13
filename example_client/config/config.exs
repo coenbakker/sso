@@ -31,7 +31,7 @@ config :example_client, :sso,
   domain: "http://localhost:4000",
   endpoint: "/auth/v1/authorize",
   client_id: "example_client_id",
-  redirect_uri: "/auth/v1/callback"
+  redirect_uri: "http://localhost:4001/callback"
 
 # Configures the public key belonging to the authentication server's private
 # key. The client application must request the public key from the

@@ -2,14 +2,14 @@ defmodule Idp.Repo.Migrations.AddClientsTable do
   use Ecto.Migration
 
   def change do
-    create table(:clients, primary_key: false) do
-      add :id, :uuid, primary_key: true, null: false
+    create table(:clients) do
+      add :client_id, :string, null: false
       add :redirect_uri, :string, null: false
 
       timestamps()
     end
 
-    create unique_index(:clients, [:id])
-    create unique_index(:clients, [:id, :redirect_uri])
+    create unique_index(:clients, [:client_id])
+    create unique_index(:clients, [:client_id, :redirect_uri])
   end
 end

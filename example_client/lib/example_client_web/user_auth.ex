@@ -70,6 +70,6 @@ defmodule ExampleClientWeb.UserAuth do
     client_id = Keyword.get(sso, :client_id)
     redirect_uri = Keyword.get(sso, :redirect_uri)
 
-    "#{domain}#{endpoint}?client_id=#{client_id}&redirect_uri=#{domain}#{redirect_uri}"
+    "#{domain}#{endpoint}?client_id=#{client_id}&redirect_uri=#{redirect_uri}"
   end
 end
