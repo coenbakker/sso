@@ -25,15 +25,31 @@ defmodule IdpWeb.UserAuth do
   disconnected on log out. The line can be safely removed
   if you are not using LiveView.
   """
-  def log_in_user(conn, user, params \\ %{}) do
+  def log_in_user(conn, user, params \\ %{}, opts \\ []) do
     token = Accounts.generate_user_session_token(user)
-    user_return_to = get_session(conn, :user_return_to)
+    return_to = get_return_to(conn, opts)
 
-    conn
-    |> renew_session()
-    |> put_token_in_session(token)
-    |> maybe_write_remember_me_cookie(token, params)
-    |> redirect(to: user_return_to || signed_in_path(conn))
+    conn =
+      conn
+      |> renew_session()
+      |> put_token_in_session(token)
+      |> maybe_write_remember_me_cookie(token, params)
+
+    with true <- not is_nil(return_to),
+         true <- Keyword.get(opts, :is_oauth_login, false) do
+      access_token = build_access_token()
+      redirect(conn, external: return_to <> "?access_token=#{access_token}")
+    else
+      _ ->
+        redirect(conn, to: return_to || signed_in_path(conn))
+    end
+  end
+
+  defp get_return_to(conn, opts) do
+    case Keyword.get(opts, :is_oauth_login, false) do
+      true -> get_session(conn, :return_to_resource)
+      false -> get_session(conn, :user_return_to)
+    end
   end
 
   defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do
@@ -226,4 +242,19 @@ defmodule IdpWeb.UserAuth do
   defp maybe_store_return_to(conn), do: conn
 
   defp signed_in_path(_conn), do: ~p"/"
+
+  defp build_access_token() do
+    IdpWeb.Token.generate_and_sign!(
+      %{
+        "iss" => "example_client",
+        "sub" => "user_id",
+        "aud" => "example_client",
+        "exp" => DateTime.utc_now() |> DateTime.add(10, :minute) |> DateTime.to_unix(),
+        "nbf" => DateTime.utc_now() |> DateTime.to_unix(),
+        "iat" => DateTime.utc_now() |> DateTime.to_unix(),
+        "jti" => Joken.generate_jti()
+      },
+      :private_key
+    )
+  end
 end

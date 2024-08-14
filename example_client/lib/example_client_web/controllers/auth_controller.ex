@@ -1,6 +1,7 @@
 defmodule ExampleClientWeb.AuthController do
   use ExampleClientWeb, :controller
 
+  # TODO: Handle failed authentication
   def callback(conn, params) do
     conn = fetch_session(conn)
 
