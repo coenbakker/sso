@@ -1,5 +1,6 @@
 defmodule IdpWeb.AuthControllerTest do
   use IdpWeb.ConnCase, async: true
+
   alias Idp.Repo
   alias Idp.Clients.Client
   alias Idp.Accounts.User

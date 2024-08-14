@@ -1,6 +1,5 @@
 defmodule IdpWeb.Router do
   use IdpWeb, :router
-
   import IdpWeb.UserAuth
 
   pipeline :browser do

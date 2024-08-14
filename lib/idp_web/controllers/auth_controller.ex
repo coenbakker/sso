@@ -7,9 +7,6 @@ defmodule IdpWeb.AuthController do
   @remember_me_cookie "_idp_web_user_remember_me"
   @required_authorize_params ~w(client_id redirect_uri)
 
-  # TODO
-  # Add tests for the controller
-
   def authorize(conn, params) do
     with {:ok, _} <- check_required_params(conn),
          {:ok, _} <- check_client_registration(conn),

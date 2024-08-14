@@ -4,6 +4,6 @@ defmodule Mix.Tasks.TestAll do
   @shortdoc "Run tests for the authorization server and the example client application"
   def run(_args) do
     Mix.shell().cmd("mix test")
-    Mix.shell().cmd("cd example_client && mix test")
+    Mix.shell().cmd("mix test", cd: "example_client")
   end
 end
