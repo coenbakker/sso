@@ -4,9 +4,10 @@ defmodule IdpWeb.UserSessionController do
   alias Idp.Accounts
   alias IdpWeb.UserAuth
 
+  @oauth_login_path "/auth/v1/log_in"
+
   def create(conn, %{"_action" => "oauth_login"} = params) do
-    conn
-    |> create(params, "Authorization successful!", has_external_return_to: true)
+    create(conn, params, "Authorization successful!", is_oauth_login: true)
   end
 
   def create(conn, %{"_action" => "registered"} = params) do
@@ -32,10 +33,15 @@ defmodule IdpWeb.UserSessionController do
       |> UserAuth.log_in_user(user, user_params, opts)
     else
       # In order to prevent user enumeration attacks, don't disclose whether the email is registered.
-      conn
-      |> put_flash(:error, "Invalid email or password")
-      |> put_flash(:email, String.slice(email, 0, 160))
-      |> redirect(to: ~p"/users/log_in")
+      conn =
+        conn
+        |> put_flash(:error, "Invalid email or password")
+        |> put_flash(:email, String.slice(email, 0, 160))
+
+      case Keyword.get(opts, :is_oauth_login, false) do
+        true -> redirect(conn, to: @oauth_login_path)
+        false -> redirect(conn, to: ~p"/users/log_in")
+      end
     end
   end
 

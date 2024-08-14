@@ -14,9 +14,11 @@ defmodule ExampleClientWeb.PageControllerTest do
   end
 
   describe "private/2" do
-    test "redirects to login page when authorization header is missing", %{conn: conn} do
+    test "redirects to login page with signed access token when authorization header is missing",
+         %{conn: conn} do
       conn = get(conn, "/private")
-      assert redirected_to(conn) == @login_uri
+      assert @login_uri <> token = redirected_to(conn)
+      assert String.length(token) > 0
     end
 
     test "grants access when authorization header is valid", %{conn: conn} do
@@ -30,7 +32,8 @@ defmodule ExampleClientWeb.PageControllerTest do
       assert html_response(conn, 200) =~ "The Private Page"
     end
 
-    test "redirects to login page when authorization header is expired", %{conn: conn} do
+    test "redirects to login page with signed access token when authorization header is expired",
+         %{conn: conn} do
       expired_access_token = JokenTestUtils.build_expired_access_token!()
 
       conn =
@@ -38,10 +41,12 @@ defmodule ExampleClientWeb.PageControllerTest do
         |> put_req_header("authorization", "Bearer #{expired_access_token}")
         |> get("/private")
 
-      assert redirected_to(conn) == @login_uri
+      assert @login_uri <> token = redirected_to(conn)
+      assert String.length(token) > 0
     end
 
-    test "redirects to login page when authorization header is invalid", %{conn: conn} do
+    test "redirects to login page with signed access token when authorization header is invalid",
+         %{conn: conn} do
       invalid_access_token =
         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MjQwNzQwMzYsImlhdCI6MTYyNDA3MzIzNiwiaXNzIjoiZXhhbXBsZV9jbGllbnQiLCJqdGkiOiJk"
 
@@ -50,7 +55,8 @@ defmodule ExampleClientWeb.PageControllerTest do
         |> put_req_header("authorization", "Bearer #{invalid_access_token}")
         |> get("/private")
 
-      assert redirected_to(conn) == @login_uri
+      assert @login_uri <> token = redirected_to(conn)
+      assert String.length(token) > 0
     end
   end
 end

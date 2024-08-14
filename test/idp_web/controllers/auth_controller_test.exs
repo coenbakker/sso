@@ -2,6 +2,7 @@ defmodule IdpWeb.AuthControllerTest do
   use IdpWeb.ConnCase, async: true
   alias Idp.Repo
   alias Idp.Clients.Client
+  alias Idp.Accounts.User
 
   @oauth_login_url "/auth/v1/log_in"
 
@@ -20,7 +21,8 @@ defmodule IdpWeb.AuthControllerTest do
       assert redirected_to(conn) == @oauth_login_url
     end
 
-    test "redirects to callback URL with signed access token when user token is present in session", %{conn: conn} do
+    test "redirects to redirection URI with signed access token if user token is present in session",
+         %{conn: conn} do
       Repo.insert!(%Client{client_id: "123", redirect_uri: "https://page.com/callback"})
 
       query_string =
@@ -31,7 +33,7 @@ defmodule IdpWeb.AuthControllerTest do
         |> Plug.Test.init_test_session(user_token: "user_token")
         |> get("/auth/v1/authorize?#{query_string}")
 
-      assert  "https://page.com/callback?access_token" <> token = redirected_to(conn)
+      assert "https://page.com/callback?access_token" <> token = redirected_to(conn)
       assert String.length(token) > 0
     end
 
@@ -57,16 +59,42 @@ defmodule IdpWeb.AuthControllerTest do
       assert resp =~ "Password"
     end
 
-    test "redirects if credentials valid", %{conn: _conn} do
-      assert true
+    test "redirects to redirection URI with signed access token if credentials are valid", %{
+      conn: conn
+    } do
+      %User{
+        email: "test@example.com",
+        hashed_password: Bcrypt.hash_pwd_salt("some_password_1234")
+      }
+      |> Repo.insert!()
+
+      conn =
+        conn
+        |> Plug.Test.init_test_session(return_to_resource: "https://page.com/callback")
+        |> post(
+          "/users/log_in?_action=oauth_login",
+          %{user: %{email: "test@example.com", password: "some_password_1234"}}
+        )
+
+      assert "https://page.com/callback?access_token" <> token = redirected_to(conn)
+      assert String.length(token) > 0
     end
 
-    test "redirects to login page with a flash error if credentials invalid", %{conn: _conn} do
-      assert true
-    end
+    test "redirects to login page with a flash error if credentials invalid", %{conn: conn} do
+      %User{
+        email: "test@example.com",
+        hashed_password: Bcrypt.hash_pwd_salt("some_password_1234")
+      }
+      |> Repo.insert!()
 
-    test "redirects to home with flash info if already logged in", %{conn: _conn} do
-      assert true
+      conn =
+        conn
+        |> post(
+          "/users/log_in?_action=oauth_login",
+          %{user: %{email: "test@example.com", password: "wrong_password_1234"}}
+        )
+
+      assert redirected_to(conn) == @oauth_login_url
     end
   end
 end

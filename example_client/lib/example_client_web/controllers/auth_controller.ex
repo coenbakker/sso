@@ -1,6 +1,7 @@
 defmodule ExampleClientWeb.AuthController do
   use ExampleClientWeb, :controller
 
+  # TODO: Handle failed authentication
   def callback(conn, params) do
     {:ok, claims} = Joken.verify(params["resource"], Joken.Signer.parse_config(:public_key))
 

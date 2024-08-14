@@ -9,31 +9,33 @@ defmodule IdpWeb.AuthController do
 
   # TODO
   # Add tests for the controller
-  # Implement missing functionality
 
-  def authorize(conn, _params) do
+  def authorize(conn, params) do
     with {:ok, _} <- check_required_params(conn),
          {:ok, _} <- check_client_registration(conn),
          {:token_found, conn} <- check_user_token(conn) do
-      # TODO
-      # Generate signed access token
-      # Redirect to callback URL with access token
-      redirect(conn, external: conn.params["redirect_uri"])
+      access_token = build_access_token()
+      redirect_uri = params["redirect_uri"]
+
+      redirect(conn, external: redirect_uri <> "?access_token=#{access_token}")
     else
       {:token_not_found, conn} ->
-        redirect(conn, to: @oauth_login_path)
+        conn
+        |> fetch_session()
+        |> put_session(:return_to_resource, params["redirect_uri"])
+        |> redirect(to: @oauth_login_path)
 
       {:error, :unknown_client} ->
         conn
         |> put_status(:bad_request)
         |> put_view(IdpWeb.ErrorHTML)
-        |> render(:invalid_registration, redirect_uri: conn.params["redirect_uri"])
+        |> render(:invalid_registration, redirect_uri: params["redirect_uri"])
 
       {:error, :missing_params} ->
         conn
         |> put_status(:bad_request)
         |> put_view(IdpWeb.ErrorHTML)
-        |> render(:missing_authorize_params, redirect_uri: conn.params["redirect_uri"])
+        |> render(:missing_authorize_params, redirect_uri: params["redirect_uri"])
     end
   end
 
@@ -54,7 +56,7 @@ defmodule IdpWeb.AuthController do
     client = Clients.get_client_by_client_id(conn.params["client_id"])
 
     if client && client.redirect_uri == conn.params["redirect_uri"] do
-      {:ok, conn}
+      {:ok, client}
     else
       {:error, :unknown_client}
     end
@@ -78,5 +80,20 @@ defmodule IdpWeb.AuthController do
     conn
     |> put_session(:user_token, token)
     |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
+  end
+
+  defp build_access_token() do
+    IdpWeb.Token.generate_and_sign!(
+      %{
+        "iss" => "example_client",
+        "sub" => "user_id",
+        "aud" => "example_client",
+        "exp" => DateTime.utc_now() |> DateTime.add(10, :minute) |> DateTime.to_unix(),
+        "nbf" => DateTime.utc_now() |> DateTime.to_unix(),
+        "iat" => DateTime.utc_now() |> DateTime.to_unix(),
+        "jti" => Joken.generate_jti()
+      },
+      :private_key
+    )
   end
 end
