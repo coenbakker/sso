@@ -67,7 +67,8 @@ defmodule ExampleClientWeb.PageControllerTest do
         |> put_req_header("authorization", "Bearer #{valid_access_token}")
         |> get("/private")
 
-      assert redirected_to(conn) == @login_uri
+      assert @login_uri <> token = redirected_to(conn)
+      assert String.length(token) > 0
     end
   end
 end
